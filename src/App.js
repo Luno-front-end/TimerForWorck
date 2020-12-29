@@ -4,9 +4,8 @@ export default function App() {
   const [hours, setHours] = useState("00");
   const [mins, setMins] = useState("00");
   const [sec, setSec] = useState("00");
-  const [timer, setTimer] = useState(new Date(ms).toISOString().slice(11, 19));
 
-  const timerF = () => {
+  const timer = () => {
     const startData = Date.now();
     setInterval(() => {
       const currentData = Date.now();
@@ -36,7 +35,7 @@ export default function App() {
       <p>{hours}</p>
       <p>{mins}</p>
       <p>{sec}</p>
-      <button type="button" onClick={timerF}>
+      <button type="button" onClick={timer}>
         запуск
       </button>
     </div>
