@@ -1,20 +1,77 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function App() {
   const [hours, setHours] = useState("00");
   const [mins, setMins] = useState("00");
   const [sec, setSec] = useState("00");
+  const [intervalId, setIntervalId] = useState(null);
+  const [isActive, setIsActive] = useState(false);
+  const [timesetPause, setTimesetPause] = useState(null);
 
   const timer = () => {
-    const startData = Date.now();
-    setInterval(() => {
-      const currentData = Date.now();
-      const deltaDate = currentData - startData;
-      const { hoursComp, minsComp, secComp } = getTimeComponents(deltaDate);
-      setHours(hoursComp);
-      setMins(minsComp);
-      setSec(secComp);
-    }, 1000);
+    const startTime = Date.now();
+    setIntervalId(
+      setInterval(() => {
+        const currentTime = Date.now();
+        const deltaDate = currentTime - startTime;
+        setTimesetPause(deltaDate);
+        const { hoursComp, minsComp, secComp } = getTimeComponents(deltaDate);
+        setHours(hoursComp);
+        setMins(minsComp);
+        setSec(secComp);
+        console.log();
+      }, 1000)
+    );
+    setIsActive(true);
+  };
+
+  const timerStart = () => {
+    if (isActive) {
+      return;
+    }
+
+    timer();
+  };
+
+  const timerStop = () => {
+    clearInterval(intervalId);
+    setTimesetPause(null);
+    setIsActive(false);
+    setHours("00");
+    setMins("00");
+    setSec("00");
+  };
+
+  const timerReset = () => {
+    timerStop();
+    timer();
+  };
+  const timerWite = () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+      setIsActive(false);
+      setIntervalId(null);
+      return;
+    }
+
+    if (timesetPause) {
+      const newStartDate = Date.now();
+      setIntervalId(
+        setInterval(() => {
+          const newCurentDate = Date.now();
+          const deltaDateWeit = newCurentDate - newStartDate + timesetPause;
+          setTimesetPause(deltaDateWeit);
+          const { hoursComp, minsComp, secComp } = getTimeComponents(
+            deltaDateWeit
+          );
+          setHours(hoursComp);
+          setMins(minsComp);
+          setSec(secComp);
+          console.log();
+        }, 1000)
+      );
+      setIsActive(true);
+    }
   };
 
   function pad(value) {
@@ -35,8 +92,17 @@ export default function App() {
       <p>{hours}</p>
       <p>{mins}</p>
       <p>{sec}</p>
-      <button type="button" onClick={timer}>
+      <button type="button" onClick={timerStart}>
         запуск
+      </button>
+      <button type="button" onClick={timerStop}>
+        Stop
+      </button>
+      <button type="button" onClick={timerReset}>
+        Reset
+      </button>
+      <button type="button" onClick={timerWite}>
+        Wite
       </button>
     </div>
   );
