@@ -27,10 +27,14 @@ export default function Timer() {
   };
 
   const timerWite = (e) => {
+    // якщо активний таймер, виконай це.
     if (isActive) {
+      // спочатку почисти таймаут від минулого (якщо був)
       clearTimeout(timerId);
+      //створи новий таймер і запиши його в стейт
       setTimerId(
         setTimeout(() => {
+          //якщо e.detail === 2, очисти інтервал і зроби таймер не активним в іншому випадку (якщо був по факту 1 клік), вилали цей таймаут
           if (e.detail === 2) {
             clearInterval(intervalId);
             setIsActive(false);
@@ -39,13 +43,21 @@ export default function Timer() {
           }
         }, 300)
       );
-
+      //вийди
       return;
     }
+    // якщо щось було записано в intervalId, виконай це.
+
     if (intervalId) {
+      // спочатку почисти таймаут від минулого (якщо був)
+
       clearTimeout(timerId);
+      //створи новий таймер і запиши його в стейт
+
       setTimerId(
         setTimeout(() => {
+          //якщо e.detail === 2, очисти інтервал і зроби таймер не активним в іншому випадку (якщо був по факту 1 клік), вилали цей таймаут
+
           if (e.detail === 2) {
             timer();
           } else {
@@ -63,6 +75,7 @@ export default function Timer() {
 
   const timerStop = () => {
     clearInterval(intervalId);
+    clearTimeout(timerId);
     setMs(0);
     setIntervalId(null);
     setIsActive(false);
