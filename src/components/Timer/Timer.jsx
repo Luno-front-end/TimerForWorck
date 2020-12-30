@@ -26,7 +26,7 @@ export default function Timer() {
     timer();
   };
 
-  const timerWite = (e) => {
+  const timerWait = (e) => {
     // якщо активний таймер, виконай це.
     if (isActive) {
       // спочатку почисти таймаут від минулого (якщо був)
@@ -91,7 +91,7 @@ export default function Timer() {
 
       <div className={s.containerBtn}>
         <Button onClick={timerStart}>Start</Button>
-        <Button onClick={timerWite}>Wite</Button>
+        <Button onClick={timerWait}>Wait</Button>
         <Button onClick={timerReset}>Reset</Button>
         <Button onClick={timerStop}>Stop</Button>
       </div>
