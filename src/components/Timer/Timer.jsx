@@ -1,11 +1,13 @@
 import { useState } from "react";
 
 import Button from "../Button/Button";
-import s from "./Timer.module.css"
+import Container from "../Container/Container";
+import s from "./Timer.module.css";
 
 export default function Timer() {
   const [ms, setMs] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
+  const [timerId, setTimerId] = useState(null);
   const [isActive, setIsActive] = useState(false);
 
   const timer = () => {
@@ -24,14 +26,33 @@ export default function Timer() {
     timer();
   };
 
-  const timerWite = () => {
+  const timerWite = (e) => {
     if (isActive) {
-      clearInterval(intervalId);
-      setIsActive(false);
+      clearTimeout(timerId);
+      setTimerId(
+        setTimeout(() => {
+          if (e.detail === 2) {
+            clearInterval(intervalId);
+            setIsActive(false);
+          } else {
+            clearTimeout(timerId);
+          }
+        }, 300)
+      );
+
       return;
     }
     if (intervalId) {
-      timer();
+      clearTimeout(timerId);
+      setTimerId(
+        setTimeout(() => {
+          if (e.detail === 2) {
+            timer();
+          } else {
+            clearTimeout(timerId);
+          }
+        }, 300)
+      );
     }
   };
 
@@ -48,16 +69,19 @@ export default function Timer() {
   };
 
   return (
-    <div>
-      <p>{new Date(ms).toISOString().slice(11, 19)}</p>
-     
-          <div>
-              <Button onClick={timerStart}>Start</Button>
-          <Button onClick={timerWite}>Wite</Button>
-              <Button onClick={timerReset}>Reset</Button>
-              <Button onClick={timerStop}>Stop</Button>
-          </div>
+    <Container>
+      <div>
+        <span className={s.timer}>
+          {new Date(ms).toISOString().slice(11, 19)}
+        </span>
+      </div>
 
-    </div>
+      <div className={s.containerBtn}>
+        <Button onClick={timerStart}>Start</Button>
+        <Button onClick={timerWite}>Wite</Button>
+        <Button onClick={timerReset}>Reset</Button>
+        <Button onClick={timerStop}>Stop</Button>
+      </div>
+    </Container>
   );
 }
